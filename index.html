@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Stackly home</title>
+  
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+
+  <style>
+    /* ---------- Global custom styles ---------- */
+    :root {
+      --accent: #06b6d4; /* cyan-400 */
+      --muted: #9ca3af;
+      --card: #0f1724; /* dark card */
+    }
+
+    /* Smooth entrance animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp .9s cubic-bezier(.2,.9,.2,1) both; }
+
+    @keyframes fadeScale {
+      from { opacity: 0; transform: translateY(24px) scale(.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .fade-scale { animation: fadeScale 1s ease both; }
+
+    /* Subtle float on cards */
+    .card-hover { transition: transform .35s ease, box-shadow .35s ease; }
+    .card-hover:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 18px 40px rgba(2,6,23,.6); }
+
+    /* Desktop dropdown style */
+    .dropdown-panel { min-width: 11rem; }
+
+    /* Hero overlay & text shadow */
+    .hero-overlay { background: linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.75)); }
+    .glow { text-shadow: 0 6px 30px rgba(6,182,212,0.08); }
+
+    /* Responsive tweaks */
+    @media (min-width:768px) {
+      .nav-center { left: 50%; transform: translateX(-50%); }
+    }
+
+    /* Accessibility focus */
+    a:focus, button:focus { outline: 3px solid rgba(6,182,212,0.18); outline-offset: 2px; }
+
+    /* small utils */
+    .muted { color: var(--muted); }
+
+    .what-we-do {
+    padding: 60px 20px;
+    text-align: center;
+    background: #050505; /* or remove if you want full black page */
+}
+
+.what-we-do h2 {
+    font-size: 40px;
+    font-weight: 700;
+    color: #d8d8e1;
+    margin-bottom: 15px;
+}
+
+.what-we-do p {
+    color: #9eb5c7;
+    font-size: 18px;
+}
+/* Custom breakpoint: show desktop menu only at ≥1117px */
+@media (min-width: 1117px) {
+  .xl2\:flex {
+    display: flex !important;
+  }
+  .xl2\:hidden {
+    display: none !important;
+  }
+}
+.nav-active {
+  color: cyan !important;
+}
+
+
+
+  </style>
+</head>
+<body class="font-inter antialiased bg-black text-white">
+
+ 
+<!-- HEADER -->
+<header class="header fixed top-0 left-0 w-full z-50 bg-black shadow h-20 flex items-center">
+  <div class="max-w-7xl w-full mx-auto px-6 flex items-center justify-between h-full">
+
+    <!-- LOGO -->
+    <a href="index.html" class="flex items-center gap-3">
+  <img src="stackly.webp" class="w-40 h-40 object-contain" alt="Stackly logo">
+</a>
+
+    <!-- DESKTOP MENU (only visible above 1117px) -->
+    <nav class="hidden xl2:flex gap-8 font-semibold items-center text-white">
+      <div class="relative group">
+       <button onclick="toggleMobileDrop()" class="flex items-center justify-between w-full py-2 nav-active">
+    <span>Home</span>
+    <i class="fa-solid fa-chevron-down text-sm"></i>
+</button>
+
+
+        <div class="absolute bg-black shadow-lg rounded-lg hidden group-hover:block 
+             w-36 top-full pt-3 z-50">
+          <a href="home2.html" class="block px-4 py-2 hover:bg-gray-800 nav-link">Home 2</a>
+        </div>
+      </div>
+
+      <a href="about1.html" class="nav-link hover:text-cyan-400">Menu🍔</a>
+      <a href="services1.html" class="nav-link hover:text-cyan-400">Specials🥘🍰</a>
+      <a href="FAQ.html" class="hover:text-cyan-300">Gallery📸</a>
+      <a href="contact.html" class="nav-link hover:text-cyan-400">Contact📞</a>
+
+      <a href="login.html" class="px-5 py-2 bg-cyan-500 text-black rounded-lg hover:bg-cyan-400 nav-link">
+        Order now
+      </a>
+    </nav>
+
+    <!-- MOBILE HAMBURGER (visible up to 1117px) -->
+    <button id="hamburgerBtn" class="xl2:hidden p-2 rounded-md">
+      <i class="fa-solid fa-bars text-2xl text-white"></i>
+    </button>
+
+  </div>
+</header>
+
+  
+  <!-- ================= MOBILE MENU ================= -->
+  <nav id="mobileMenu" class="hidden fixed inset-x-0 top-20 z-40 bg-black text-white border-t border-gray-800 shadow-lg">
+    <div class="px-6 py-6 flex flex-col gap-4 text-lg font-semibold">
+
+      <button onclick="toggleMobileDrop()" class="flex items-center justify-between w-full">
+        <span>Home </span>
+        <i class="fa-solid fa-chevron-down text-sm"></i>
+      </button>
+
+      <div id="mobileHomeDrop" class="hidden pl-4">
+        <a href="home2.html" class="block py-2 hover:text-cyan-300">Home 2</a>
+      </div>
+
+      <a href="about1.html" class="hover:text-cyan-300">Menu🍔</a>
+      <a href="services1.html" class="hover:text-cyan-300">Specials🥘🍰</a>
+      <a href="FAQ.html" class="hover:text-cyan-300">Gallery📸</a>
+
+      <!-- ACTIVE CONTACT MOBILE -->
+      <a href="contact.html" class="active-link">Contact</a>
+
+      <a href="login.html" class="text-cyan-300 font-semibold mt-2">Order now</a>
+    </div>
+  </nav>
+<main class="pt-32">
+
+<script>
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
+
+  hamburgerBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+  function toggleMobileDrop() {
+  const drop = document.getElementById("mobileHomeDrop");
+  drop.classList.toggle("hidden");
+}
+
+</script>
+  <!-- ================= HERO ================= -->
+  <section
+  class="relative min-h-[72vh] flex items-center bg-cover bg-center"
+  style="background-image: url('home.webp');">
+
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 bg-black/50"></div>
+
+  <div class="relative z-10 max-w-6xl w-full mx-auto px-6 text-center">
+
+    <!-- White Box -->
+    <div class="inline-block border border-white px-10 py-10 rounded-md fade-scale"
+         style="animation-delay:.15s">
+
+      <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 text-white">
+        MAKE YOU FOOD BETTER
+      </h1>
+
+      <p class="max-w-2xl mx-auto text-gray-200 text-lg fade-up" style="animation-delay:.3s">
+        Every dish at Stackly is crafted by master sushi chefs combining tradition, precision
+      </p>
+
+    </div>
+</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stackly Restaurant</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #000000;
+      color: #222;
+      overflow-x: hidden;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 80px 10%;
+      min-height: 100vh;
+      background: #000000;
+      animation: fadeIn 1.2s ease;
+    }
+
+    .hero-text {
+      max-width: 50%;
+      animation: slideLeft 1.2s ease;
+    }
+
+    .hero-text h1 {
+      font-size: 64px;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .hero-text p {
+      margin: 20px 0;
+      font-size: 18px;
+      opacity: 0.8;
+    }
+
+    .btn-primary {
+      padding: 14px 28px;
+      background: #000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .btn-primary:hover {
+      background: #ff2a2a;
+      transform: scale(1.05);
+    }
+
+    .hero-img-wrap {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      animation: slideRight 1.2s ease;
+    }
+
+    .hero-img {
+      width: 90%;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      transition: 0.4s;
+    }
+
+    .hero-img:hover {
+      transform: scale(1.04);
+    }
+
+    /* MENU SECTION */
+    .menu {
+      padding: 80px 10%;
+      text-align: center;
+    }
+
+    .menu h2 {
+      font-size: 42px;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+
+    .menu-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .menu-item {
+      background: #5d364e;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      transition: 0.3s;
+      animation: fadeUp 1s ease;
+    }
+
+    .menu-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .menu-item img {
+  height: 200px;
+  width: 200px;
+  object-fit: cover; /* Crop excess parts while filling the box */
+  display: block;
+  margin: 0 auto;
+}
+
+
+    .menu-item h3 {
+      font-size: 22px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .menu-item p {
+      opacity: 0.7;
+      font-size: 15px;
+    }
+
+    /* DARK SECTION */
+    .dark-section {
+      padding: 120px 10%;
+      background: #111;
+      color: #fff;
+      text-align: center;
+      animation: fadeIn 1.4s ease;
+    }
+
+    .dark-section h2 {
+      font-size: 40px;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .dark-section p {
+      font-size: 18px;
+      opacity: 0.8;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideLeft {
+      from { opacity: 0; transform: translateX(-60px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideRight {
+      from { opacity: 0; transform: translateX(60px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 60px;
+      }
+
+      .hero-text, .hero-img-wrap {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .hero-text h1 {
+        font-size: 48px;
+      }
+
+      .hero-img {
+        width: 100%;
+        margin-top: 30px;
+      }
+    }
+    
+  </style>
+</head>
+<body>
+
+  <!-- HERO SECTION -->
+  <header class="hero">
+    <div class="hero-text">
+      <h1>Stackly Modern<br>Restaurant</h1>
+      <p>Experience authentic, luxury-crafted sushi made with the freshest ingredients and artistic presentation.</p>
+      <a href="contact.html" class="btn-primary">Order Now</a>
+    </div>
+    <div class="hero-img-wrap">
+      <img class="hero-img" src="resto.webp" alt="Sushi" />
+    </div>
+  </header>
+
+  <!-- MENU SECTION -->
+  <section class="menu">
+    <h2>Our Special Menu</h2>
+    <div class="menu-container">
+
+      <div class="menu-item">
+        <img src="salmon.webp" />
+        <h3>Signature Roll</h3>
+        <p>Fresh salmon and avocado with chef’s special sauce.</p>
+      </div>
+
+      <div class="menu-item">
+        <img src="tuna.webp" />
+        <h3>Dragon Fire</h3>
+        <p>Spicy tuna, tempura crisp, and flaming chili topping.</p>
+      </div>
+
+      <div class="menu-item">
+        <img src="beef.webp" />
+        <h3>Golden Maki</h3>
+        <p>Premium wagyu beef layered over classic maki.</p>
+      </div>
+
+      <div class="menu-item">
+        <img src="tuna2.webp" />
+        <h3>Royal Tuna</h3>
+        <p>Bluefin tuna with truffle-infused soy glaze.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FEATURE CARDS SECTION -->
+  <section class="feature-cards">
+    <h2>Why Choose Stackly?</h2>
+    <div class="card-grid">
+
+      <div class="card">
+        <img src="fresh.webp" class="card-icon" />
+        <h3>Fresh Ingredients</h3>
+        <p>We use only premium, hand‑picked ingredients delivered daily.</p>
+      </div>
+
+      <div class="card">
+        <img src="chef.webp" class="card-icon" />
+        <h3>Master Chefs</h3>
+        <p>Our chefs craft each dish with passion, skill, and artistry.</p>
+      </div>
+
+      <div class="card">
+        <img src="delivery.webp" class="card-icon" />
+        <h3>Fast Delivery</h3>
+        <p>Enjoy your favorite meals delivered hot and fresh to your door.</p>
+      </div>
+
+      <div class="card">
+        <img src="quality.webp" class="card-icon" />
+        <h3>Top Quality</h3>
+        <p>We maintain unmatched quality standards in taste & presentation.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <style>
+    .feature-cards {
+      padding: 100px 10%;
+      text-align: center;
+      animation: fadeIn 1.2s ease;
+    }
+    .feature-cards h2 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 40px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 30px;
+    }
+    .card {
+      background: #54395b;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: 0.35s;
+      animation: fadeUp 1.1s ease;
+    }
+    .card:hover {
+      transform: translateY(-12px) scale(1.04);
+      box-shadow: 0 16px 50px rgba(0,0,0,0.2);
+    }
+    .card-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      animation: float 4s ease-in-out infinite;
+    }
+    .card h3 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .card p {
+      opacity: 0.75;
+      font-size: 15px;
+    }
+  </style>
+
+<!-- DARK SECTION --> 
+  <section class="dark-section">
+    <h2>Crafted With Passion</h2>
+    <p>Every dish at Stackly is crafted by master sushi chefs combining tradition, precision, and creativity to bring you a premium dining experience.</p>
+  </section>
+
+</section>
+
+  <!-- EXTENDED GALLERY SECTION WITH ANIMATIONS -->
+  <section class="gallery">
+    <h2>Premium Gallery</h2>
+    <div class="gallery-grid">
+      <img src="pg1.webp" class="g-item" />
+      <img src="pg2.webp" class="g-item" />
+      <img src="pg3.webp" class="g-item" />
+      <img src="pg4.webp" class="g-item" />
+      <img src="pg5.webp" class="g-item" />
+      <img src="pg6.webp" class="g-item" />
+      <img src="pg7.webp" class="g-item" />
+      <img src="pg8.webp" class="g-item" />
+      <img src="pg9.webp" class="g-item" />
+      <img src="pg10.webp" class="g-item" />
+    </div>
+  </section>
+
+  <style>
+    .gallery {
+      padding: 100px 10%;
+      text-align: center;
+      animation: fadeIn 1.4s ease;
+    }
+    .gallery h2 {
+      font-size: 42px;
+      margin-bottom: 40px;
+      font-weight: 700;
+    }
+    .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjusts columns responsively */
+  gap: 15px; /* Space between images */
+}
+
+.gallery-grid .g-item {
+  width: 100%;
+  height: 200px; /* Set same height for all images */
+  object-fit: cover; /* Crops and fills container without distortion */
+  display: block;
+  border-radius: 8px; /* Optional: rounded corners */
+}
+
+    .g-item {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      animation: zoomIn 1s ease;
+      transition: 0.4s;
+    }
+    .g-item:hover {
+      transform: scale(1.08) rotate(1deg);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.25);
+    }
+
+    /* NEW ANIMATIONS */
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.6); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Apply floating animation to hero image */
+    .hero-img {
+      animation: float 5s ease-in-out infinite;
+    }
+
+    /* Apply floating effect to menu items */
+    .menu-item:hover {
+      animation: float 3s ease-in-out infinite;
+    }
+  </style>
+
+</body>
+</html>
+
+<footer class="bg-[#0c0016] text-gray-300 py-16 px-6">
+
+  <div class="max-w-6xl mx-auto">
+
+    <!-- GRID -->
+    <div class="grid md:grid-cols-3 gap-12 items-start text-center md:text-left">
+
+      <!-- LEFT -->
+      <div>
+        <img src="stackly.webp" class="w-40 mx-auto md:mx-0 mb-3" />
+          Get your business engaged
+        </p>
+      </div>
+
+      <!-- CENTER -->
+      <div class="md:border-l md:border-gray-700 md:pl-10">
+        <h4 class="text-xl font-semibold text-white mb-4 tracking-wide">Main</h4>
+
+        <ul class="space-y-3 text-gray-300 text-sm">
+          <li><a href="index.html" class="hover:text-white">Home </a></li>
+          <li><a href="about1.html" class="hover:text-white">Specials🥘🍰</a></li>
+          <li><a href="services1.html" class="hover:text-white">Gallery📸</a></li>
+          <li><a href="contact.html" class="hover:text-white">Contact📞</a></li>
+        </ul>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="md:border-l md:border-gray-700 md:pl-10">
+        <h4 class="text-xl font-semibold text-white mb-4 tracking-wide">Social</h4>
+
+        <ul class="space-y-3 text-gray-300 text-sm">
+          <li><i class="fa-brands fa-facebook mr-2"></i> <a href="404.html" class="hover:text-white">Facebook</a></li>
+          <li><i class="fa-brands fa-twitter mr-2"></i> <a href="404.html" class="hover:text-white">Twitter</a></li>
+          <li><i class="fa-brands fa-linkedin mr-2"></i> <a href="404.html" class="hover:text-white">LinkedIn</a></li>
+          <li><i class="fa-brands fa-instagram mr-2"></i> <a href="404.html" class="hover:text-white">Instagram</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- COPYRIGHT -->
+    <div class="text-center text-gray-500 text-sm mt-12 border-t border-gray-800 pt-6">
+      © Stackly – 2025. All rights reserved.
+    </div>
+
+  </div>
+</footer>
