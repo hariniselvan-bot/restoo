@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Stackly home</title>
+  
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+
+  <style>
+    /* ---------- Global custom styles ---------- */
+    :root {
+      --accent: #06b6d4; /* cyan-400 */
+      --muted: #9ca3af;
+      --card: #0f1724; /* dark card */
+    }
+
+    /* Smooth entrance animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp .9s cubic-bezier(.2,.9,.2,1) both; }
+
+    @keyframes fadeScale {
+      from { opacity: 0; transform: translateY(24px) scale(.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .fade-scale { animation: fadeScale 1s ease both; }
+
+    /* Subtle float on cards */
+    .card-hover { transition: transform .35s ease, box-shadow .35s ease; }
+    .card-hover:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 18px 40px rgba(2,6,23,.6); }
+
+    /* Desktop dropdown style */
+    .dropdown-panel { min-width: 11rem; }
+
+    /* Hero overlay & text shadow */
+    .hero-overlay { background: linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.75)); }
+    .glow { text-shadow: 0 6px 30px rgba(6,182,212,0.08); }
+
+    /* Responsive tweaks */
+    @media (min-width:768px) {
+      .nav-center { left: 50%; transform: translateX(-50%); }
+    }
+
+    /* Accessibility focus */
+    a:focus, button:focus { outline: 3px solid rgba(6,182,212,0.18); outline-offset: 2px; }
+
+    /* small utils */
+    .muted { color: var(--muted); }
+
+    .what-we-do {
+    padding: 60px 20px;
+    text-align: center;
+    background: #050505; /* or remove if you want full black page */
+}
+
+.what-we-do h2 {
+    font-size: 40px;
+    font-weight: 700;
+    color: #d8d8e1;
+    margin-bottom: 15px;
+}
+
+.what-we-do p {
+    color: #9eb5c7;
+    font-size: 18px;
+}
+/* Custom breakpoint: show desktop menu only at ≥1117px */
+@media (min-width: 1117px) {
+  .xl2\:flex {
+    display: flex !important;
+  }
+  .xl2\:hidden {
+    display: none !important;
+  }
+}
+.nav-active {
+  color: cyan !important;
+}
+
+
+
+  </style>
+</head>
+<body class="font-inter antialiased bg-black text-white">
+
+ 
+<!-- HEADER -->
+<header class="header fixed top-0 left-0 w-full z-50 bg-black shadow h-20 flex items-center">
+  <div class="max-w-7xl w-full mx-auto px-6 flex items-center justify-between h-full">
+
+    <!-- LOGO -->
+    <a href="index.html" class="flex items-center gap-3">
+  <img src="stackly.webp" class="w-40 h-40 object-contain" alt="Stackly logo">
+</a>
+
+    <!-- DESKTOP MENU -->
+    <nav class="hidden xl2:flex gap-8 font-semibold items-center text-white">
+
+      <div class="relative group">
+        <a href="home2.html" class="hover:text-cyan-400 flex items-center gap-1 nav-link">
+          Home 2
+          <i class="fa-solid fa-chevron-down text-xs"></i>
+        </a>
+
+        <div class="absolute bg-black shadow-lg rounded-lg hidden group-hover:block 
+             w-36 top-full pt-3 z-50">
+          <a href="index.html" class="block px-4 py-2 hover:bg-gray-800 nav-link">Home</a>
+        </div>
+      </div>
+      <a href="about.html" class="nav-link"style="color: #22d3ee !important; font-weight: 700 !important;">About❤️</a>
+      <a href="services1.html" class="nav-link hover:text-cyan-400">dashboard📊</a>
+      <a href="FAQ.html" class="hover:text-cyan-300">FAQ🍔</a>
+      <a href="contact.html" class="nav-link hover:text-cyan-400">Contact📞</a>
+
+      <a href="login.html" class="px-5 py-2 bg-cyan-500 text-black rounded-lg hover:bg-cyan-400 nav-link">
+        Order now
+      </a>
+    </nav>
+
+    <!-- MOBILE HAMBURGER (visible up to 1117px) -->
+    <button id="hamburgerBtn" class="xl2:hidden p-2 rounded-md">
+      <i class="fa-solid fa-bars text-2xl text-white"></i>
+    </button>
+
+  </div>
+</header>
+
+  
+  <!-- ================= MOBILE MENU ================= -->
+  <nav id="mobileMenu" class="hidden fixed inset-x-0 top-20 z-40 bg-black text-white border-t border-gray-800 shadow-lg">
+    <div class="px-6 py-6 flex flex-col gap-4 text-lg font-semibold">
+
+      <button onclick="toggleMobileDrop()" class="flex items-center justify-between w-full">
+        <span>Home 2</span>
+        <i class="fa-solid fa-chevron-down text-sm"></i>
+      </button>
+
+      <div id="mobileHomeDrop" class="hidden pl-4">
+        <a href="index.html" class="block py-2 hover:text-cyan-300">Home</a>
+      </div>
+
+      <a href="about.html" class="hover:text-cyan-300">About❤️</a>
+      <a href="Dashboard.html" class="hover:text-cyan-300">dashboard📊</a>
+      <a href="FAQ1.html" class="hover:text-cyan-300">FAQ🍔</a>
+
+      <!-- ACTIVE CONTACT MOBILE -->
+      <a href="contact.html" class="active-link">Contact</a>
+
+      <a href="login.html" class="text-cyan-300 font-semibold mt-2">Order now</a>
+    </div>
+  </nav>
+<main class="pt-32">
+
+<script>
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
+
+  hamburgerBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+  function toggleMobileDrop() {
+  const drop = document.getElementById("mobileHomeDrop");
+  drop.classList.toggle("hidden");
+}
+
+</script>
+  <!-- ================= HERO ================= -->
+  <section
+  class="relative min-h-[72vh] flex items-center bg-cover bg-center"
+  style="background-image: url('about2.webp');">
+
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 bg-black/50"></div>
+
+  <div class="relative z-10 max-w-6xl w-full mx-auto px-6 text-center">
+
+    <!-- White Box -->
+    <div class="inline-block border border-white px-10 py-10 rounded-md fade-scale"
+         style="animation-delay:.15s">
+<div class="absolute inset-0 bg-black bg-opacity-60"></div>
+
+    <div class="relative z-10 fade-up">
+      <h1 class="text-6xl md:text-7xl font-bold tracking-wide">
+        <span class="text-yellow-400">Stackly Luxury Restaurant</span> 
+      </h1>
+      <p class="text-gray-300 mt-5 text-lg max-w-2xl mx-auto">
+  A luxury dining experience inspired by Japanese mastery & global fusion artistry.
+      </p>
+</section>
+  <title>About • Stackly Luxury Restaurant</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body { background:#000; color:white; }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(40px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .fade-up { opacity:0; animation:fadeUp 1s ease forwards; }
+
+    /* Gold outline */
+    .gold-glow:hover {
+      box-shadow:0 0 25px gold;
+      border-color:gold;
+      transform:translateY(-6px);
+    }
+
+    .gold-title { text-shadow:0 0 18px rgba(255,215,0,0.7); }
+
+    /* Split overlay */
+    .overlay-img {
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      filter:brightness(0.7);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- STORY SECTION -->
+  <section class="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-16 fade-up">
+
+    <div>
+      <h2 class="text-4xl font-bold text-yellow-400 gold-title">Our Story</h2>
+      <p class="text-gray-400 mt-6 leading-relaxed text-lg">
+        Founded in 2019, Stackly Restaurant blends tradition with innovation.
+        Our chefs craft every dish with passion, precision, and pure artistry —
+        bringing the authentic Japanese soul into every bite.
+      </p>
+
+      <p class="text-gray-400 mt-4 leading-relaxed text-lg">
+        We believe in premium ingredients, flawless technique, and delivering an unforgettable
+        visual and dining experience for every guest.
+      </p>
+
+      <a href="contact.html" class="inline-block mt-8 px-10 py-3 bg-yellow-400 text-black font-bold rounded-xl hover:scale-110 duration-300">
+        Explore Menu
+      </a>
+    </div>
+
+    <div>
+      <img src="quality.webp" class="rounded-2xl border border-yellow-500 gold-glow duration-300 shadow-xl">
+    </div>
+
+  </section>
+
+
+  <!-- MISSION + VISION -->
+  <section class="max-w-7xl mx-auto px-6 py-24 fade-up">
+    <h2 class="text-4xl font-bold text-center text-yellow-400 gold-title">Our Mission & Vision</h2>
+    <p class="text-gray-400 text-center mt-2">Crafting excellence with passion</p>
+
+    <div class="grid md:grid-cols-2 gap-12 mt-16">
+
+      <div class="bg-neutral-950 p-8 rounded-2xl border border-yellow-600 gold-glow duration-300">
+        <h3 class="text-3xl font-bold text-yellow-300 mb-4">Our Mission</h3>
+        <p class="text-gray-400 leading-relaxed text-lg">
+          To deliver world-class Japanese fusion cuisine with authenticity, passion,
+          and unmatched presentation — giving every guest a premium dining experience.
+        </p>
+      </div>
+
+      <div class="bg-neutral-950 p-8 rounded-2xl border border-yellow-600 gold-glow duration-300">
+        <h3 class="text-3xl font-bold text-yellow-300 mb-4">Our Vision</h3>
+        <p class="text-gray-400 leading-relaxed text-lg">
+          To become Asia’s most iconic luxury fusion brand, redefining culinary artistry
+          and elevating the fine dining atmosphere.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- CHEF SECTION -->
+  <section class="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-16 fade-up">
+
+    <div>
+      <img src="chef.webp" class="rounded-2xl border border-yellow-500 gold-glow duration-300 shadow-xl">
+    </div>
+
+    <div class="flex flex-col justify-center">
+      <h2 class="text-4xl font-bold text-yellow-400 gold-title">Meet Our Executive Chef</h2>
+
+      <p class="text-gray-400 mt-6 text-lg leading-relaxed">
+        Chef Hiroshi Tanaka brings 18+ years of Michelin-level experience from Tokyo and Osaka.
+        Specializing in premium sashimi & Wagyu fusion, he transforms ingredients into edible artwork.
+      </p>
+
+      <ul class="mt-6 text-gray-300 text-lg space-y-3">
+        <li>• 18 Years Michelin Experience</li>
+        <li>• Master of Sashimi & Wagyu Crafting</li>
+        <li>• Specializes in Golden Signature Rolls</li>
+      </ul>
+    </div>
+
+  </section>
+
+
+  <!-- STATS -->
+  <section class="max-w-7xl mx-auto px-6 py-24 fade-up text-center">
+    <h2 class="text-4xl font-bold text-yellow-400 gold-title">Our Excellence</h2>
+
+    <div class="grid md:grid-cols-4 gap-12 mt-16 text-yellow-300 text-4xl font-bold">
+
+      <div class="bg-neutral-900 p-8 rounded-xl gold-glow border border-yellow-600 duration-300">
+        10K+ <p class="text-gray-400 text-lg font-normal">Happy Customers</p>
+      </div>
+
+      <div class="bg-neutral-900 p-8 rounded-xl gold-glow border border-yellow-600 duration-300">
+        120+ <p class="text-gray-400 text-lg font-normal">Menu Items</p>
+      </div>
+
+      <div class="bg-neutral-900 p-8 rounded-xl gold-glow border border-yellow-600 duration-300">
+        18+ <p class="text-gray-400 text-lg font-normal">Years Experience</p>
+      </div>
+
+      <div class="bg-neutral-900 p-8 rounded-xl gold-glow border border-yellow-600 duration-300">
+        50+ <p class="text-gray-400 text-lg font-normal">Luxury Dishes</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- CTA -->
+  <section class="text-center py-28 fade-up">
+    <h2 class="text-5xl font-bold text-yellow-400 gold-title">Book Your Luxury Experience</h2>
+    <p class="text-gray-400 mt-3 max-w-xl mx-auto">
+      Reserve a table and dive into premium Japanese fusion craftsmanship.
+    </p>
+
+    <a href="login.html"
+       class="inline-block mt-8 px-12 py-4 rounded-xl text-black font-bold bg-yellow-400 hover:scale-110 duration-300 text-2xl">
+      Book Now
+    </a>
+  </section>
+
+</body>
+</html>
+
+<footer class="bg-[#0c0016] text-gray-300 py-16 px-6">
+
+  <div class="max-w-6xl mx-auto">
+
+    <!-- GRID -->
+    <div class="grid md:grid-cols-3 gap-12 items-start text-center md:text-left">
+
+      <!-- LEFT -->
+      <div>
+        <img src="stackly.webp" class="w-40 mx-auto md:mx-0 mb-3" />
+          Get your business engaged
+        </p>
+      </div>
+
+      <!-- CENTER -->
+      <div class="md:border-l md:border-gray-700 md:pl-10">
+        <h4 class="text-xl font-semibold text-white mb-4 tracking-wide">Main</h4>
+
+        <ul class="space-y-3 text-gray-300 text-sm">
+          <li><a href="home2.html" class="hover:text-white">Home 2 </a></li>
+          <li><a href="about.html" class="hover:text-white">About❤️</a></li>
+          <li><a href="services.html" class="hover:text-white">FAQ🍔</a></li>
+          <li><a href="contact.html" class="hover:text-white">Contact📞</a></li>
+        </ul>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="md:border-l md:border-gray-700 md:pl-10">
+        <h4 class="text-xl font-semibold text-white mb-4 tracking-wide">Social</h4>
+
+        <ul class="space-y-3 text-gray-300 text-sm">
+          <li><i class="fa-brands fa-facebook mr-2"></i> <a href="404.html" class="hover:text-white">Facebook</a></li>
+          <li><i class="fa-brands fa-twitter mr-2"></i> <a href="404.html" class="hover:text-white">Twitter</a></li>
+          <li><i class="fa-brands fa-linkedin mr-2"></i> <a href="404.html" class="hover:text-white">LinkedIn</a></li>
+          <li><i class="fa-brands fa-instagram mr-2"></i> <a href="404.html" class="hover:text-white">Instagram</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- COPYRIGHT -->
+    <div class="text-center text-gray-500 text-sm mt-12 border-t border-gray-800 pt-6">
+      © Stackly – 2025. All rights reserved.
+    </div>
+
+  </div>
+</footer>
